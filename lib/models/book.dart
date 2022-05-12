@@ -2,7 +2,7 @@ class Book {
   final int? id;
   final String title;
   final String author;
-  final String authorShortBio;
+  final String briefIntroduction;
   int? calification; //Can change
   String? finalOpinion; //Can change
 
@@ -11,7 +11,7 @@ class Book {
       this.id,
       required this.title,
       required this.author,
-      required this.authorShortBio,
+      required this.briefIntroduction,
       this.calification,
       this.finalOpinion
       });
@@ -22,7 +22,7 @@ class Book {
       'id':id,
       'title':title,
       'author':author,
-      'authorShortBio':authorShortBio,
+      'briefIntroduction':briefIntroduction,
       'calification':calification,
       'finalOpinion':finalOpinion
     };
@@ -33,7 +33,7 @@ class Book {
     : id = result["id"],
       title = result["title"],
       author = result["author"],
-      authorShortBio = result["authorShortBio"],
+      briefIntroduction = result["briefIntroduction"],
       calification = result["calification"],
       finalOpinion = result["finalOpinion"];
 }

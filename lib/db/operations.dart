@@ -23,7 +23,7 @@ class Operation {
         onCreate: (db, version) {
       return db.execute("""
       CREATE TABLE Books (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, title TEXT NOT NULL, 
-      author TEXT NOT NULL, authorShortBio TEXT NOT NULL, calification INTEGER, finalOpinion TEXT);
+      author TEXT NOT NULL, briefIntroduction TEXT NOT NULL, calification INTEGER, finalOpinion TEXT);
 
       CREATE TABLE Comments (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
       bookId INTEGER NOT NULL, content TEXT,
