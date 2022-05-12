@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:readerdatabase/db/operations.dart';
+import 'package:readerdatabase/models/book.dart';
 
 class AddBook extends StatefulWidget {
   const AddBook({Key? key}) : super(key: key);
@@ -20,6 +21,7 @@ class _AddBookState extends State<AddBook> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.black,
         floatingActionButton: FloatingActionButton.extended(
           heroTag: "addBook",
           backgroundColor: Colors.black,
@@ -29,6 +31,13 @@ class _AddBookState extends State<AddBook> {
           onPressed: () {
             if (_formKey.currentState!.validate()) {
               //Add Create Book function
+              String title = _title.text;
+              String author = _author.text;
+              String authorBio = _authorBio.text;
+              Book newBook =
+                  Book(title: title, author: author, authorShortBio: authorBio);
+              Operation.insertBookDB(newBook);
+              //Showing up an little snackbar
               ScaffoldMessenger.of(context)
                   .showSnackBar(SnackBar(
                       duration: const Duration(seconds: 2),
@@ -56,7 +65,8 @@ class _AddBookState extends State<AddBook> {
                 style: TextStyle(
                     fontSize: 36,
                     fontFamily: 'Roboto',
-                    fontStyle: FontStyle.italic),
+                    fontStyle: FontStyle.italic,
+                    color: Colors.white),
               ),
               padding: const EdgeInsets.only(top: 48, left: 36),
             ),
@@ -75,23 +85,32 @@ class _AddBookState extends State<AddBook> {
                         style: TextStyle(
                             fontSize: 36,
                             fontFamily: 'Roboto',
-                            fontStyle: FontStyle.italic),
+                            fontStyle: FontStyle.italic,
+                            color: Colors.white),
                       ),
                       padding: const EdgeInsets.only(left: 36),
                     ),
                     Container(
                       alignment: Alignment.topLeft,
-                      padding: const EdgeInsets.symmetric(horizontal: 36),
+                      padding: const EdgeInsets.only(left: 36, right: 36, top: 20),
                       child: TextFormField(
                         controller: _title,
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return "Please enter some title";
+                            return "Please enter a title";
                           }
                           return null;
                         },
+                        style: const TextStyle(color: Colors.white),
                         decoration: const InputDecoration(
-                            labelText: "Write book's title"),
+                            labelText: "Write book's title", 
+                            fillColor: Colors.white,
+                            alignLabelWithHint: true,
+                            labelStyle: TextStyle(color: Colors.white),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white))
+                            ),
+                        cursorColor: Colors.amberAccent,
                       ),
                     ),
                     const SizedBox(height: 36),
@@ -113,12 +132,20 @@ class _AddBookState extends State<AddBook> {
                         controller: _author,
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return "Please enter some author";
+                            return "Please enter an author";
                           }
                           return null;
                         },
+                        style: const TextStyle(color: Colors.white),
                         decoration: const InputDecoration(
-                            labelText: "Write book's author"),
+                            labelText: "Write book's author", 
+                            fillColor: Colors.white,
+                            alignLabelWithHint: true,
+                            labelStyle: TextStyle(color: Colors.white),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white))
+                            ),
+                        cursorColor: Colors.amberAccent,
                       ),
                     ),
                     const SizedBox(height: 36),
@@ -140,14 +167,23 @@ class _AddBookState extends State<AddBook> {
                       child: TextFormField(
                         controller: _authorBio,
                         maxLines: 5,
+                        maxLength: 500,
                         validator: (value) {
                           if (value!.isEmpty) {
                             return "Please enter author's bio";
                           }
                           return null;
                         },
+                        style: const TextStyle(color: Colors.white),
                         decoration: const InputDecoration(
-                            hintText: "Write book's author bio"),
+                            labelText: "Write book's author bio", 
+                            fillColor: Colors.white,
+                            alignLabelWithHint: true,
+                            labelStyle: TextStyle(color: Colors.white),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white))
+                            ),
+                        cursorColor: Colors.amberAccent,
                       ),
                     )
                   ],
