@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:readerdatabase/add-book.dart';
 import 'package:readerdatabase/db/operations.dart';
 import 'package:readerdatabase/models/book.dart';
+import 'package:readerdatabase/screens/book/book_home.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
@@ -93,9 +94,9 @@ class _HomePageState extends State<HomePage> {
                   ),
                   Text(
                     (booksDB.isNotEmpty)
-                        ? (booksDB[booksDB.length - 1].title.length > 30) 
-                          ? "${booksDB[booksDB.length - 1].title.characters.take(30)}.."
-                          : booksDB[booksDB.length - 1].title
+                        ? (booksDB[booksDB.length - 1].title.length > 30)
+                            ? "${booksDB[booksDB.length - 1].title.characters.take(30)}.."
+                            : booksDB[booksDB.length - 1].title
                         : "Add a new read",
                     style: const TextStyle(
                         fontSize: 30,
@@ -117,7 +118,21 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            onTap: () {},
+            onTap: () async {
+              (booksDB.isNotEmpty)
+                  ? {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const BookHome(),
+                              settings: RouteSettings(
+                                  arguments: booksDB[booksDB.length - 1]))),
+                      setState(() {
+                        _retrieveBookData();
+                      })
+                    }
+                  : Null;
+            },
           ),
           const SizedBox(
             height: 22,
@@ -134,7 +149,8 @@ class _HomePageState extends State<HomePage> {
           const SizedBox(
             height: 12,
           ),
-          ListView.builder(
+          Expanded(
+              child: ListView.builder(
             itemBuilder: ((context, index) {
               return Dismissible(
                   direction: DismissDirection.endToStart,
@@ -174,15 +190,26 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                         ),
-                        onTap: () {},
+                        onTap: () async {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const BookHome(),
+                                  settings: RouteSettings(
+                                      arguments: booksDB[index])));
+                          setState(() {
+                            _retrieveBookData();
+                          });
+                        },
                       ),
                       color: Colors.black));
             }),
             itemCount: booksDB.length,
             shrinkWrap: true,
+            physics: const ClampingScrollPhysics(),
             padding: const EdgeInsets.only(left: 32, right: 32),
             scrollDirection: Axis.vertical,
-          )
+          ))
         ],
       ),
     );
