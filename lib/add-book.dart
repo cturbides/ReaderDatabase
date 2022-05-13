@@ -16,7 +16,7 @@ class _AddBookState extends State<AddBook> {
   //TextEditingController used to retrieve values from each TextFormField
   final _title = TextEditingController();
   final _author = TextEditingController();
-  final _authorBio = TextEditingController();
+  final _briefIntro = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -33,9 +33,9 @@ class _AddBookState extends State<AddBook> {
               //Add Create Book function
               String title = _title.text;
               String author = _author.text;
-              String authorBio = _authorBio.text;
+              String briefIntro = _briefIntro.text;
               Book newBook =
-                  Book(title: title, author: author, authorShortBio: authorBio);
+                  Book(title: title, author: author, briefIntroduction: briefIntro);
               Operation.insertBookDB(newBook);
               //Showing up an little snackbar
               ScaffoldMessenger.of(context)
@@ -92,7 +92,8 @@ class _AddBookState extends State<AddBook> {
                     ),
                     Container(
                       alignment: Alignment.topLeft,
-                      padding: const EdgeInsets.only(left: 36, right: 36, top: 20),
+                      padding:
+                          const EdgeInsets.only(left: 36, right: 36, top: 20),
                       child: TextFormField(
                         controller: _title,
                         validator: (value) {
@@ -103,13 +104,12 @@ class _AddBookState extends State<AddBook> {
                         },
                         style: const TextStyle(color: Colors.white),
                         decoration: const InputDecoration(
-                            labelText: "Write book's title", 
+                            labelText: "Write book's title",
                             fillColor: Colors.white,
                             alignLabelWithHint: true,
                             labelStyle: TextStyle(color: Colors.white),
                             focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white))
-                            ),
+                                borderSide: BorderSide(color: Colors.white))),
                         cursorColor: Colors.amberAccent,
                       ),
                     ),
@@ -121,13 +121,14 @@ class _AddBookState extends State<AddBook> {
                         style: TextStyle(
                             fontSize: 36,
                             fontFamily: 'Roboto',
-                            fontStyle: FontStyle.italic),
+                            fontStyle: FontStyle.italic,
+                            color: Colors.white),
                       ),
                       padding: const EdgeInsets.only(left: 36),
                     ),
                     Container(
                       alignment: Alignment.topLeft,
-                      padding: const EdgeInsets.symmetric(horizontal: 36),
+                      padding: const EdgeInsets.only(left: 36, right: 36, top: 20),
                       child: TextFormField(
                         controller: _author,
                         validator: (value) {
@@ -138,13 +139,12 @@ class _AddBookState extends State<AddBook> {
                         },
                         style: const TextStyle(color: Colors.white),
                         decoration: const InputDecoration(
-                            labelText: "Write book's author", 
+                            labelText: "Write book's author",
                             fillColor: Colors.white,
                             alignLabelWithHint: true,
                             labelStyle: TextStyle(color: Colors.white),
                             focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white))
-                            ),
+                                borderSide: BorderSide(color: Colors.white))),
                         cursorColor: Colors.amberAccent,
                       ),
                     ),
@@ -152,37 +152,37 @@ class _AddBookState extends State<AddBook> {
                     Container(
                       alignment: Alignment.topLeft,
                       child: const Text(
-                        "Short Author Biography",
+                        "A brief intro",
                         style: TextStyle(
                             fontSize: 36,
                             fontFamily: 'Roboto',
-                            fontStyle: FontStyle.italic),
+                            fontStyle: FontStyle.italic,
+                            color: Colors.white),
                       ),
                       padding: const EdgeInsets.only(left: 36),
                     ),
                     Container(
                       alignment: Alignment.topLeft,
-                      padding: const EdgeInsets.symmetric(horizontal: 36),
+                      padding: const EdgeInsets.only(left: 36, right: 36, top: 20),
                       height: 5 * 24.0, //5 lines
                       child: TextFormField(
-                        controller: _authorBio,
+                        controller: _briefIntro,
                         maxLines: 5,
                         maxLength: 500,
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return "Please enter author's bio";
+                            return "Please write something";
                           }
                           return null;
                         },
                         style: const TextStyle(color: Colors.white),
                         decoration: const InputDecoration(
-                            labelText: "Write book's author bio", 
+                            labelText: "Write book's brief introduction",
                             fillColor: Colors.white,
                             alignLabelWithHint: true,
                             labelStyle: TextStyle(color: Colors.white),
                             focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white))
-                            ),
+                                borderSide: BorderSide(color: Colors.white))),
                         cursorColor: Colors.amberAccent,
                       ),
                     )
