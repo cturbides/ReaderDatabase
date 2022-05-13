@@ -21,18 +21,21 @@ class Operation {
     return openDatabase(join(await getDatabasesPath(), 'books.db'),
         //Now, we will create the tables inside the db
         onCreate: (db, version) {
-      return db.execute("""
+      db.execute("""
       CREATE TABLE Books (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, title TEXT NOT NULL, 
       author TEXT NOT NULL, briefIntroduction TEXT NOT NULL, calification INTEGER, finalOpinion TEXT);
-
+      """);
+      db.execute("""
       CREATE TABLE Comments (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
       bookId INTEGER NOT NULL, content TEXT,
       FOREIGN KEY(bookId) REFERENCES Books(id));
-
+      """);
+      db.execute("""
       CREATE TABLE Quotes (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
       bookId INTEGER NOT NULL, content TEXT,
       FOREIGN KEY(bookId) REFERENCES Books(id));
-
+      """);
+      return db.execute("""
       CREATE TABLE UnknowWords (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
       bookId INTEGER NOT NULL, name TEXT NOT NULL, content TEXT NOT NULL,
       FOREIGN KEY(bookId) REFERENCES Books(id));
@@ -40,11 +43,11 @@ class Operation {
     }, version: 1);
   }
 
-   //* CRUD SECTION
-   //* 1: Insert
-   //* 2: Retrieve
-   //* 3: Update
-   //* 4: Delete
+  //* CRUD SECTION
+  //* 1: Insert
+  //* 2: Retrieve
+  //* 3: Update
+  //* 4: Delete
 
   //=======================INSERT==========================================
   //Function to insert a new book register
@@ -91,6 +94,16 @@ class Operation {
     return booksList.map((e) => Book.fromMap(e)).toList();
   }
 
+  //Function to retrieve an specific book from Book table
+  static Future<Book> book(int id) async {
+    final Database db = await _openDB();
+    //Getting the whole Books table
+    final List<Map<String, Object?>> bookinMap =
+        await db.query('Books', where: 'id = ?', whereArgs: [id]);
+    //Returning the book object into a map
+    return bookinMap.map((e) => Book.fromMap(e)).first;
+  }
+
   //Function to retrieve data from Comments table
   static Future<List<Comments>> comments() async {
     final Database db = await _openDB(); //Creating an instance from our db
@@ -103,6 +116,20 @@ class Operation {
 
     //Returning a List<Comments> object
     return commentList.map((e) => Comments.fromMap(e)).toList();
+  }
+
+  //Function to retrieve a single comment from Comments table
+  static Future<Comments> lastComment(int id) async {
+    final Database db = await _openDB();
+    //Getting the whole Comments table
+    try {
+      final List<Map<String, Object?>> commentList =
+          await db.query('Comments', where: 'bookId= ?', whereArgs: [id]);
+      //Returning the last comment
+      return commentList.map((e) => Comments.fromMap(e)).last;
+    } catch (e) {
+      return Comments(bookId: 0, content: "Add a new Comment");
+    }
   }
 
   //Function to retrieve data from Quotes table
@@ -119,6 +146,21 @@ class Operation {
     return quotesList.map((e) => Quotes.fromMap(e)).toList();
   }
 
+  //Function to retrieve the last Quote of an specific book
+  static Future<Quotes> lastQuote(int bookId) async {
+    final Database db = await _openDB();
+
+    //Getting the whole table
+    try {
+      final List<Map<String, Object?>> quotesList =
+          await (db.query('Quotes', where: "bookId = ?", whereArgs: [bookId]));
+      //Returning the last item
+      return quotesList.map((e) => Quotes.fromMap(e)).last;
+    } catch (e) {
+      return Quotes(bookId: 0, content: "Add a new Quote");
+    }
+  }
+
   //Function to retrieve data from UnknowWords table
   static Future<List<UnknowWords>> unknowWords() async {
     final Database db = await _openDB(); //Creating an instance from our db
@@ -132,6 +174,20 @@ class Operation {
 
     //Returning a List<UnknowWords> object
     return unknowWordsList.map((e) => UnknowWords.fromMap(e)).toList();
+  }
+
+  //Funtion to retrieve the last Unknow Word
+  static Future<UnknowWords> lastUnknowWord(int bookId) async {
+    final Database db = await _openDB();
+    try {
+      //Getting the unknow words from specifics books
+      final List<Map<String, Object?>> listUnknowWords = await db
+          .query('UnknowWords', where: "bookId = ?", whereArgs: [bookId]);
+      //Returning the last unknowWord
+      return listUnknowWords.map((e) => UnknowWords.fromMap(e)).last;
+    } catch (e) {
+      return UnknowWords(bookId: 0, name: "Word", content: "Definition");
+    }
   }
   //=========================================================================
 
@@ -164,7 +220,8 @@ class Operation {
   }
 
   //Function to update data from UnknowWords table
-  static Future<void> updateUnknowWord(UnknowWords unknowWordToUpdate, int id) async {
+  static Future<void> updateUnknowWord(
+      UnknowWords unknowWordToUpdate, int id) async {
     final Database db = await _openDB(); //Creating a instance from our db
     //Updating the matching row
     await db.update('UnknowWords', unknowWordToUpdate.toMap(),
@@ -177,7 +234,10 @@ class Operation {
   //Function to delete data from Books Table
   static Future<void> deleteBook(int id) async {
     final Database db = await _openDB(); //Creating a instance from our db
-    //Deleting the row with the match id
+    //Deleting the row with the match id in all tables
+    await db.delete('Quotes', where: 'bookId = ?', whereArgs: [id]);
+    await db.delete('Comments', where: 'bookId = ?', whereArgs: [id]);
+    await db.delete('UnknowWords', where: 'bookId = ?', whereArgs: [id]);
     await db.delete('Books', where: 'id = ?', whereArgs: [id]);
     return;
   }
