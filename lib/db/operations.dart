@@ -100,6 +100,9 @@ class Operation {
     //Getting the whole Books table
     final List<Map<String, Object?>> bookinMap =
         await db.query('Books', where: 'id = ?', whereArgs: [id]);
+    for (var i in bookinMap) {
+      print("-> ${i['title']}");
+    }
     //Returning the book object into a map
     return bookinMap.map((e) => Book.fromMap(e)).first;
   }
@@ -193,11 +196,11 @@ class Operation {
 
   //=========================UPDATE==========================================
   //Function to update data from Books table
-  static Future<void> updateBook(Book bookToUpdate, int id) async {
+  static Future<void> updateBook(Book bookToUpdate) async {
     final Database db = await _openDB(); //Creating a instance from our db
     //Updating the matching row
     await db.update('Books', bookToUpdate.toMap(),
-        where: "id = ?", whereArgs: [id]);
+        where: "id = ?", whereArgs: [bookToUpdate.id]);
     return;
   }
 

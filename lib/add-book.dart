@@ -10,6 +10,8 @@ class AddBook extends StatefulWidget {
 }
 
 class _AddBookState extends State<AddBook> {
+  String title = "New Book";
+  var _value;
   //Global key to use when validating form
   final _formKey = GlobalKey<FormState>();
 
@@ -17,6 +19,15 @@ class _AddBookState extends State<AddBook> {
   final _title = TextEditingController();
   final _author = TextEditingController();
   final _briefIntro = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+      _retrievingSettingsData();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +45,20 @@ class _AddBookState extends State<AddBook> {
               String title = _title.text;
               String author = _author.text;
               String briefIntro = _briefIntro.text;
-              Book newBook =
-                  Book(title: title, author: author, briefIntroduction: briefIntro);
-              Operation.insertBookDB(newBook);
+              if (_value == Null) {
+                Book newBook = Book(
+                    title: title,
+                    author: author,
+                    briefIntroduction: briefIntro);
+                Operation.insertBookDB(newBook);
+              } else {
+                Book bookToUpdate = Book(
+                    id: _value as int,
+                    title: title,
+                    author: author,
+                    briefIntroduction: briefIntro);
+                Operation.updateBook(bookToUpdate);
+              }
               //Showing up an little snackbar
               ScaffoldMessenger.of(context)
                   .showSnackBar(SnackBar(
@@ -60,9 +82,9 @@ class _AddBookState extends State<AddBook> {
           children: <Widget>[
             Container(
               alignment: Alignment.topLeft,
-              child: const Text(
-                "New Book",
-                style: TextStyle(
+              child: Text(
+                title,
+                style: const TextStyle(
                     fontSize: 36,
                     fontFamily: 'Roboto',
                     fontStyle: FontStyle.italic,
@@ -128,7 +150,8 @@ class _AddBookState extends State<AddBook> {
                     ),
                     Container(
                       alignment: Alignment.topLeft,
-                      padding: const EdgeInsets.only(left: 36, right: 36, top: 20),
+                      padding:
+                          const EdgeInsets.only(left: 36, right: 36, top: 20),
                       child: TextFormField(
                         controller: _author,
                         validator: (value) {
@@ -163,7 +186,8 @@ class _AddBookState extends State<AddBook> {
                     ),
                     Container(
                       alignment: Alignment.topLeft,
-                      padding: const EdgeInsets.only(left: 36, right: 36, top: 20),
+                      padding:
+                          const EdgeInsets.only(left: 36, right: 36, top: 20),
                       height: 5 * 24.0, //5 lines
                       child: TextFormField(
                         controller: _briefIntro,
@@ -190,5 +214,22 @@ class _AddBookState extends State<AddBook> {
                 ))
           ],
         )));
+  }
+
+  _retrievingSettingsData() async {
+    if (mounted) {
+      _value = (ModalRoute.of(context)!.settings.arguments != null)
+          ? ModalRoute.of(context)!.settings.arguments as int
+          : Null;
+      if (_value != Null) {
+        Book book = await Operation.book(_value as int);
+        setState(() {
+          title = "Update Book";
+          _title.text = book.title;
+          _author.text = book.author;
+          _briefIntro.text = book.briefIntroduction;
+        });
+      }
+    }
   }
 }
