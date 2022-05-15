@@ -21,7 +21,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   String name = "Carlos"; //Change
-  int index = 5;
   List<Book> booksDB = [];
   //Function executed when the screen is initializing
   @override
@@ -122,14 +121,15 @@ class _HomePageState extends State<HomePage> {
               (booksDB.isNotEmpty)
                   ? {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const BookHome(),
-                              settings: RouteSettings(
-                                  arguments: booksDB[booksDB.length - 1]))),
-                      setState(() {
-                        _retrieveBookData();
-                      })
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const BookHome(),
+                                  settings: RouteSettings(
+                                      arguments:
+                                          booksDB[booksDB.length - 1].id)))
+                          .then((value) => setState(() {
+                                _retrieveBookData();
+                              })),
                     }
                   : Null;
             },
@@ -192,14 +192,14 @@ class _HomePageState extends State<HomePage> {
                         ),
                         onTap: () async {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const BookHome(),
-                                  settings: RouteSettings(
-                                      arguments: booksDB[index])));
-                          setState(() {
-                            _retrieveBookData();
-                          });
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const BookHome(),
+                                      settings: RouteSettings(
+                                          arguments: booksDB[index].id)))
+                              .then((value) => setState(() {
+                                    _retrieveBookData();
+                                  }));
                         },
                       ),
                       color: Colors.black));
