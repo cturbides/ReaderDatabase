@@ -60,7 +60,7 @@ class Book_UnknowWordsState extends State<BookUnknowWords> {
                 padding: const EdgeInsets.only(top: 48, left: 20, right: 20),
               ),
               const SizedBox(
-                height: 45,
+                height: 25,
               ),
               Container(
                 alignment: Alignment.topLeft,

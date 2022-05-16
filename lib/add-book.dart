@@ -188,10 +188,9 @@ class _AddBookState extends State<AddBook> {
                       alignment: Alignment.topLeft,
                       padding:
                           const EdgeInsets.only(left: 36, right: 36, top: 20),
-                      height: 5 * 24.0, //5 lines
                       child: TextFormField(
                         controller: _briefIntro,
-                        maxLines: 5,
+                        maxLines: 14,
                         maxLength: 500,
                         validator: (value) {
                           if (value!.isEmpty) {

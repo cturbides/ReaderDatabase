@@ -4,6 +4,9 @@ import 'package:readerdatabase/db/operations.dart';
 import 'package:readerdatabase/models/comments.dart';
 import 'package:readerdatabase/models/quotes.dart';
 import 'package:readerdatabase/models/unknow_words.dart';
+import 'package:readerdatabase/screens/book/book_comments.dart';
+import 'package:readerdatabase/screens/book/book_quotes.dart';
+import 'package:readerdatabase/screens/book/book_unknowWords.dart';
 import '../../models/book.dart';
 
 class BookHome extends StatefulWidget {
@@ -51,20 +54,8 @@ class _BookHomeState extends State<BookHome> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          Container(
-            alignment: Alignment.topLeft,
-            child: const Text(
-              "Here is",
-              style: TextStyle(
-                  fontFamily: 'Roboto',
-                  fontStyle: FontStyle.italic,
-                  fontSize: 36,
-                  color: Colors.white),
-            ),
-            padding: const EdgeInsets.only(top: 48, left: 26),
-          ),
           const SizedBox(
-            height: 30,
+            height: 48,
           ),
           InkWell(
             child: Column(children: <Widget>[
@@ -117,7 +108,7 @@ class _BookHomeState extends State<BookHome> {
             splashColor: Colors.transparent,
           ),
           const SizedBox(
-            height: 60,
+            height: 30,
           ),
           SingleChildScrollView(
             physics: const ClampingScrollPhysics(),
@@ -144,13 +135,13 @@ class _BookHomeState extends State<BookHome> {
                     SizedBox(
                       width: double.infinity,
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 30, top: 5),
+                        padding: const EdgeInsets.only(left: 30, top: 5, right: 30),
                         child: Text(
                           "\"${lastQuote.content}\"",
                           style: const TextStyle(
                               color: Colors.white,
                               fontFamily: 'Roboto',
-                              fontSize: 26,
+                              fontSize: 20,
                               fontStyle: FontStyle.italic,
                               fontWeight: FontWeight.w200),
                         ),
@@ -158,7 +149,16 @@ class _BookHomeState extends State<BookHome> {
                     )
                   ],
                 ),
-                onLongPress: () {},
+                onLongPress: () {
+                  Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const BookQuotes(),
+                              settings: RouteSettings(arguments: _book.id!)))
+                      .then((value) => setState(() {
+                            _retrieveLastQuote(_book.id!);
+                          }));
+                },
                 splashColor: Colors.transparent,
               ),
               const SizedBox(
@@ -185,13 +185,15 @@ class _BookHomeState extends State<BookHome> {
                     SizedBox(
                       width: double.infinity,
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 30, top: 5),
+                        padding: const EdgeInsets.only(left: 30, top: 5, right: 30),
                         child: Text(
-                          "\"${lastComment.content}\"",
+                          (lastComment.content.length > 140)
+                              ? "\"${lastComment.content.characters.take(140)}...\""
+                              : "\"${lastComment.content}\"",
                           style: const TextStyle(
                               color: Colors.white,
                               fontFamily: 'Roboto',
-                              fontSize: 22,
+                              fontSize: 20,
                               fontStyle: FontStyle.italic,
                               fontWeight: FontWeight.w200),
                         ),
@@ -199,7 +201,16 @@ class _BookHomeState extends State<BookHome> {
                     )
                   ],
                 ),
-                onLongPress: () {},
+                onLongPress: () {
+                  Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const BookComments(),
+                              settings: RouteSettings(arguments: _book.id!)))
+                      .then((value) => setState(() {
+                            _retrieveLastComment(_book.id!);
+                          }));
+                },
                 splashColor: Colors.transparent,
               ),
               const SizedBox(
@@ -226,13 +237,15 @@ class _BookHomeState extends State<BookHome> {
                     SizedBox(
                       width: double.infinity,
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 30, top: 5),
+                        padding: const EdgeInsets.only(left: 30, top: 5, right: 30 ),
                         child: Text(
-                          "${lastUnknowWords.name}: ${lastUnknowWords.content}",
+                          (lastUnknowWords.content.length > 50)
+                              ? "${lastUnknowWords.name}: ${lastUnknowWords.content.characters.take(50)}.."
+                              : "${lastUnknowWords.name}: ${lastUnknowWords.content}",
                           style: const TextStyle(
                               color: Colors.white,
                               fontFamily: 'Roboto',
-                              fontSize: 26,
+                              fontSize: 20,
                               fontStyle: FontStyle.italic,
                               fontWeight: FontWeight.w200),
                         ),
@@ -240,7 +253,16 @@ class _BookHomeState extends State<BookHome> {
                     )
                   ],
                 ),
-                onLongPress: () {},
+                onLongPress: () {
+                  Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const BookUnknowWords(),
+                              settings: RouteSettings(arguments: _book.id!)))
+                      .then((value) => setState(() {
+                            _retrieveLastUnknowWord(_book.id!);
+                          }));
+                },
                 splashColor: Colors.transparent,
               ),
             ]),

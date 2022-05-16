@@ -60,7 +60,7 @@ class Book_CommentsState extends State<BookComments> {
                 padding: const EdgeInsets.only(top: 48, left: 20, right: 20),
               ),
               const SizedBox(
-                height: 45,
+                height: 25,
               ),
               Container(
                 alignment: Alignment.topLeft,

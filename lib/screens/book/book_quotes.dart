@@ -63,7 +63,7 @@ class Book_QuotesState extends State<BookQuotes> {
                 ),
               ),
               const SizedBox(
-                height: 45,
+                height: 25,
               ),
               Container(
                 alignment: Alignment.topLeft,
