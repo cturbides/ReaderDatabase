@@ -60,21 +60,21 @@ class Operation {
   //Function to insert a new comment register
   static Future<void> insertCommentDB(Comments comment) async {
     final Database db = await _openDB(); //Creating an instance from our db
-    db.insert('Books', comment.toMap());
+    db.insert('Comments', comment.toMap());
     return;
   }
 
   //Function to insert a new quote register
   static Future<void> insertQuoteDB(Quotes quote) async {
     final Database db = await _openDB(); //Creating an instance from our db
-    db.insert('Books', quote.toMap());
+    db.insert('Quotes', quote.toMap());
     return;
   }
 
   //Function to insert a new unknow words register
   static Future<void> insertUnknowWordDB(UnknowWords unknowWord) async {
     final Database db = await _openDB(); //Creating an instance from our db
-    db.insert('Books', unknowWord.toMap());
+    db.insert('UnknowWords', unknowWord.toMap());
     return;
   }
   //=======================================================================
@@ -108,10 +108,10 @@ class Operation {
   }
 
   //Function to retrieve data from Comments table
-  static Future<List<Comments>> comments() async {
+  static Future<List<Comments>> comments(int bookId) async {
     final Database db = await _openDB(); //Creating an instance from our db
     //Getting the whole Comments table
-    final List<Map<String, Object?>> commentList = await db.query('Comments');
+    final List<Map<String, Object?>> commentList = await db.query('Comments', where: "bookId = ?", whereArgs: [bookId]);
 
     for (var i in commentList) {
       print("-> ${i['content']}");
@@ -136,10 +136,10 @@ class Operation {
   }
 
   //Function to retrieve data from Quotes table
-  static Future<List<Quotes>> quotes() async {
+  static Future<List<Quotes>> quotes(int bookId) async {
     final Database db = await _openDB(); //Creating an instance from our db
     //Getting the whole Quotes table
-    final List<Map<String, Object?>> quotesList = await db.query('Quotes');
+    final List<Map<String, Object?>> quotesList = await db.query('Quotes', where: "bookId = ?", whereArgs: [bookId]);
 
     for (var i in quotesList) {
       print("-> ${i['content']}");
@@ -165,11 +165,11 @@ class Operation {
   }
 
   //Function to retrieve data from UnknowWords table
-  static Future<List<UnknowWords>> unknowWords() async {
+  static Future<List<UnknowWords>> unknowWords(int bookId) async {
     final Database db = await _openDB(); //Creating an instance from our db
     //Getting the whole UnknowWords table
     final List<Map<String, Object?>> unknowWordsList =
-        await db.query('UnknowWords');
+        await db.query('UnknowWords', where: "bookId = ?", whereArgs: [bookId]);
 
     for (var i in unknowWordsList) {
       print("-> ${i['name']}");
