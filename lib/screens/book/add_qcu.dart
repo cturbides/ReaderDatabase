@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:readerdatabase/db/operations.dart';
 import 'package:readerdatabase/models/quotes.dart';
+import 'package:readerdatabase/models/comments.dart';
+import '../../models/unknow_words.dart';
 
 class AddQCU extends StatefulWidget {
   const AddQCU({Key? key}) : super(key: key);
@@ -40,7 +42,8 @@ class _AddQCUState extends State<AddQCU> {
         heroTag: "addBook",
         onPressed: () {
           if (_formKey.currentState!.validate()) {
-            String _content = _firstTextController.text;
+            _content = _firstTextController.text;
+            //Quotes
             if (option == "Quote") {
               if (_id != null) {
                 Quotes quoteToUpdate =
@@ -51,7 +54,29 @@ class _AddQCUState extends State<AddQCU> {
                 Operation.insertQuoteDB(quote);
               }
             }
-
+            //Comments
+            else if (option == "Comment") {
+              if (_id != null) {
+                Comments commentToUpdate =
+                    Comments(bookId: bookId, content: _content, id: _id);
+                Operation.updateComment(commentToUpdate, _id);
+              } else {
+                Comments comment = Comments(bookId: bookId, content: _content);
+                Operation.insertCommentDB(comment);
+              }
+            }
+            //Unknow Words
+            else if (option == "Unknow Word") {
+              _content2 = _secondTextController.text;
+              if (_id != null) {
+                UnknowWords unknowWordToUpdate = 
+                    UnknowWords(bookId: bookId, name: _content, content: _content2, id: _id);
+                Operation.updateUnknowWord(unknowWordToUpdate, _id);
+              } else {
+                UnknowWords unknowWord = UnknowWords(bookId: bookId, name: _content, content: _content2);
+                Operation.insertUnknowWordDB(unknowWord);
+              }
+            }
             //Showing up an little snackbar
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(
@@ -117,7 +142,89 @@ class _AddQCUState extends State<AddQCU> {
                             maxLength: 140,
                           ),
                         )
-                      : Container()
+                      : (option == "Comment")
+                          ? Container(
+                              alignment: Alignment.topLeft,
+                              padding: const EdgeInsets.only(
+                                  left: 36, right: 36, top: 20),
+                              child: TextFormField(
+                                controller: _firstTextController,
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return "Please enter a Comment";
+                                  }
+                                  return null;
+                                },
+                                style: const TextStyle(color: Colors.white),
+                                decoration: const InputDecoration(
+                                    labelText: "Write a Comment",
+                                    fillColor: Colors.white,
+                                    alignLabelWithHint: true,
+                                    labelStyle: TextStyle(color: Colors.white),
+                                    focusedBorder: OutlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.white))),
+                                cursorColor: Colors.amberAccent,
+                                maxLines: 18,
+                                maxLength: 650,
+                              ),
+                            )
+                          : Column(children: <Widget>[
+                              Container(
+                                alignment: Alignment.topLeft,
+                                padding: const EdgeInsets.only(
+                                    left: 36, right: 36, top: 20),
+                                child: TextFormField(
+                                  controller: _firstTextController,
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return "Please enter a word";
+                                    }
+                                    return null;
+                                  },
+                                  style: const TextStyle(color: Colors.white),
+                                  decoration: const InputDecoration(
+                                      labelText: "Write a Word",
+                                      fillColor: Colors.white,
+                                      alignLabelWithHint: true,
+                                      labelStyle:
+                                          TextStyle(color: Colors.white),
+                                      focusedBorder: OutlineInputBorder(
+                                          borderSide:
+                                              BorderSide(color: Colors.white))),
+                                  cursorColor: Colors.amberAccent,
+                                  maxLines: 1,
+                                  maxLength: 36,
+                                ),
+                              ),
+                              Container(
+                                alignment: Alignment.topLeft,
+                                padding: const EdgeInsets.only(
+                                    left: 36, right: 36, top: 20),
+                                child: TextFormField(
+                                  controller: _secondTextController,
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return "Please enter a definition";
+                                    }
+                                    return null;
+                                  },
+                                  style: const TextStyle(color: Colors.white),
+                                  decoration: const InputDecoration(
+                                      labelText: "Write a definition",
+                                      fillColor: Colors.white,
+                                      alignLabelWithHint: true,
+                                      labelStyle:
+                                          TextStyle(color: Colors.white),
+                                      focusedBorder: OutlineInputBorder(
+                                          borderSide:
+                                              BorderSide(color: Colors.white))),
+                                  cursorColor: Colors.amberAccent,
+                                  maxLines: 4,
+                                  maxLength: 150,
+                                ),
+                              ),
+                            ])
                 ],
               ),
             )
@@ -141,6 +248,19 @@ class _AddQCUState extends State<AddQCU> {
             _content = null;
           }
           (_content != null) ? _firstTextController.text = _content : null;
+        } else {
+          try {
+            _id = _args[2];
+            _content = _args[3];
+            _content2 = _args[4];
+          } catch (e) {
+            _content = null;
+            _content2 = null;
+          }
+          if (_content != null && _content2 != null) {
+            _firstTextController.text = _content;
+            _secondTextController.text = _content2;
+          }
         }
       });
     }
