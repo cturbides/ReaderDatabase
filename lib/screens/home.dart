@@ -42,11 +42,9 @@ class _HomePageState extends State<HomePage> {
           ),
           backgroundColor: Colors.black,
           onPressed: () async {
-            final _ = await Navigator.push(context,
+            await Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const AddBook()));
-            setState(() {
-              _retrieveBookData();
-            });
+            _retrieveBookData();
           }),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -127,9 +125,7 @@ class _HomePageState extends State<HomePage> {
                                   settings: RouteSettings(
                                       arguments:
                                           booksDB[booksDB.length - 1].id)))
-                          .then((value) => setState(() {
-                                _retrieveBookData();
-                              })),
+                          .then((value) => _retrieveBookData()),
                     }
                   : Null;
             },
@@ -163,9 +159,7 @@ class _HomePageState extends State<HomePage> {
                   key: ValueKey<int>(booksDB[index].id!),
                   onDismissed: (DismissDirection direction) async {
                     await Operation.deleteBook(booksDB[index].id!);
-                    setState(() {
-                      _retrieveBookData();
-                    });
+                    _retrieveBookData();
                   },
                   child: Card(
                       shadowColor: const Color.fromARGB(255, 139, 139, 139),
@@ -197,9 +191,7 @@ class _HomePageState extends State<HomePage> {
                                       builder: (context) => const BookHome(),
                                       settings: RouteSettings(
                                           arguments: booksDB[index].id)))
-                              .then((value) => setState(() {
-                                    _retrieveBookData();
-                                  }));
+                              .then((value) => _retrieveBookData());
                         },
                       ),
                       color: Colors.black));
