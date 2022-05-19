@@ -1,3 +1,4 @@
+//Imports
 import 'package:flutter/material.dart';
 import 'package:readerdatabase/models/book.dart';
 import 'package:readerdatabase/screens/book/add_qcu.dart';
@@ -8,10 +9,10 @@ class BookUnknowWords extends StatefulWidget {
   const BookUnknowWords({Key? key}) : super(key: key);
 
   @override
-  State<BookUnknowWords> createState() => Book_UnknowWordsState();
+  State<BookUnknowWords> createState() => BookUnknowWordsState();
 }
 
-class Book_UnknowWordsState extends State<BookUnknowWords> {
+class BookUnknowWordsState extends State<BookUnknowWords> {
   List<UnknowWords> unknowWords = []; //Used with the ListView.builder
   Book _book = Book(title: "", author: "", briefIntroduction: "");
 

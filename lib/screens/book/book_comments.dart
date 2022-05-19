@@ -8,10 +8,10 @@ class BookComments extends StatefulWidget {
   const BookComments({Key? key}) : super(key: key);
 
   @override
-  State<BookComments> createState() => Book_CommentsState();
+  State<BookComments> createState() => BookCommentsState();
 }
 
-class Book_CommentsState extends State<BookComments> {
+class BookCommentsState extends State<BookComments> {
   List<Comments> comments = []; //Used with the ListView.builder
   Book _book = Book(title: "", author: "", briefIntroduction: "");
 

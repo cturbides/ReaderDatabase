@@ -11,8 +11,8 @@ class ExportGK extends StatefulWidget {
 }
 
 class _ExportGKState extends State<ExportGK> {
-  Book _book = Book(
-      title: "title", author: "author", briefIntroduction: "briefIntroduction");
+  Book _book =
+      Book(title: "", author: "", briefIntroduction: "briefIntroduction");
   final _finalController = TextEditingController();
   int _rating = 0;
   String message = "Export";
@@ -55,7 +55,9 @@ class _ExportGKState extends State<ExportGK> {
                       )),
                       Center(
                           child: Text(
-                        "by ${_book.author}",
+                        (_book.author.characters.isEmpty)
+                            ? ""
+                            : "by ${_book.author}",
                         style: const TextStyle(
                             color: Colors.white,
                             fontFamily: 'Roboto',
@@ -163,8 +165,12 @@ class _ExportGKState extends State<ExportGK> {
       Book book = await Operation.book(bookId);
       setState(() {
         _book = book;
-        (_book.finalOpinion != null) ? _finalController.text = _book.finalOpinion! : null;
-        (_book.calification != null) ? _rating = _book.calification! : _rating = 0;
+        (_book.finalOpinion != null)
+            ? _finalController.text = _book.finalOpinion!
+            : null;
+        (_book.calification != null)
+            ? _rating = _book.calification!
+            : _rating = 0;
       });
     }
   }
@@ -187,7 +193,7 @@ class HeroPageRoute<T> extends PageRoute<T> {
   bool get barrierDismissible => true;
 
   @override
-  Duration get transitionDuration => const Duration(milliseconds: 600);
+  Duration get transitionDuration => const Duration(milliseconds: 300);
 
   @override
   Color get barrierColor => Colors.black87; //Background opacity level

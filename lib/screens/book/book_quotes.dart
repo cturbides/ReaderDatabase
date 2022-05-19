@@ -8,10 +8,10 @@ class BookQuotes extends StatefulWidget {
   const BookQuotes({Key? key}) : super(key: key);
 
   @override
-  State<BookQuotes> createState() => Book_QuotesState();
+  State<BookQuotes> createState() => BookQuotesState();
 }
 
-class Book_QuotesState extends State<BookQuotes> {
+class BookQuotesState extends State<BookQuotes> {
   List<Quotes> quotes = []; //Used with the ListView.builder
   Book _book = Book(title: "", author: "", briefIntroduction: "");
 

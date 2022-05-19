@@ -86,10 +86,6 @@ class Operation {
     //Getting the whole Books table
     final List<Map<String, Object?>> booksList = await db.query('Books');
 
-    for (var i in booksList) {
-      print("-> ${i['title']}");
-    }
-
     //Returning a List<Book> object
     return booksList.map((e) => Book.fromMap(e)).toList();
   }
@@ -100,9 +96,6 @@ class Operation {
     //Getting the whole Books table
     final List<Map<String, Object?>> bookinMap =
         await db.query('Books', where: 'id = ?', whereArgs: [id]);
-    for (var i in bookinMap) {
-      print("-> ${i['title']}");
-    }
     //Returning the book object into a map
     return bookinMap.map((e) => Book.fromMap(e)).first;
   }
@@ -113,10 +106,6 @@ class Operation {
     //Getting the whole Comments table
     final List<Map<String, Object?>> commentList =
         await db.query('Comments', where: "bookId = ?", whereArgs: [bookId]);
-
-    for (var i in commentList) {
-      print("-> ${i['content']}");
-    }
 
     //Returning a List<Comments> object
     return commentList.map((e) => Comments.fromMap(e)).toList();
@@ -143,10 +132,6 @@ class Operation {
     final List<Map<String, Object?>> quotesList =
         await db.query('Quotes', where: "bookId = ?", whereArgs: [bookId]);
 
-    for (var i in quotesList) {
-      print("-> ${i['content']}");
-    }
-
     //Returning a List<Quotes> object
     return quotesList.map((e) => Quotes.fromMap(e)).toList();
   }
@@ -172,10 +157,6 @@ class Operation {
     //Getting the whole UnknowWords table
     final List<Map<String, Object?>> unknowWordsList =
         await db.query('UnknowWords', where: "bookId = ?", whereArgs: [bookId]);
-
-    for (var i in unknowWordsList) {
-      print("-> ${i['name']}");
-    }
 
     //Returning a List<UnknowWords> object
     return unknowWordsList.map((e) => UnknowWords.fromMap(e)).toList();
