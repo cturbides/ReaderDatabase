@@ -92,10 +92,8 @@ class Book_CommentsState extends State<BookComments> {
                       ),
                       key: UniqueKey(),
                       onDismissed: (DismissDirection direction) async {
-                        Operation.deleteComment(comments[index].id!);
-                        setState(() {
-                          _retrieveComments();
-                        });
+                        await Operation.deleteComment(comments[index].id!);
+                        _retrieveComments();
                       },
                       child: Card(
                           shadowColor: const Color.fromARGB(255, 139, 139, 139),

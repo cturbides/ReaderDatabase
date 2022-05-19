@@ -80,7 +80,7 @@ class _AddQCUState extends State<AddQCU> {
             //Showing up an little snackbar
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(
-                    duration: const Duration(seconds: 2),
+                    duration: const Duration(milliseconds: 10),
                     content: WillPopScope(
                         child: const Text("Saving.."),
                         onWillPop: () async {

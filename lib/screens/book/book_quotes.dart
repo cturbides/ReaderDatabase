@@ -95,10 +95,8 @@ class Book_QuotesState extends State<BookQuotes> {
                       ),
                       key: UniqueKey(),
                       onDismissed: (DismissDirection direction) async {
-                        Operation.deleteQuote(quotes[index].id!);
-                        setState(() {
-                          _retrieveQuotes();
-                        });
+                        await Operation.deleteQuote(quotes[index].id!);
+                        _retrieveQuotes();
                       },
                       child: Card(
                           shadowColor: const Color.fromARGB(255, 139, 139, 139),

@@ -92,10 +92,8 @@ class Book_UnknowWordsState extends State<BookUnknowWords> {
                       ),
                       key: UniqueKey(),
                       onDismissed: (DismissDirection direction) async {
-                        Operation.deleteUnknowWord(unknowWords[index].id!);
-                        setState(() {
-                          _retrieveUnknow();
-                        });
+                        await Operation.deleteUnknowWord(unknowWords[index].id!);
+                        _retrieveUnknow();
                       },
                       child: Card(
                           shadowColor: const Color.fromARGB(255, 139, 139, 139),
@@ -115,12 +113,11 @@ class Book_UnknowWordsState extends State<BookUnknowWords> {
                               child: Text(
                                 unknowWords[index].content,
                                 style: const TextStyle(
-                                  fontSize: 16,
-                                  fontFamily: 'Roboto',
-                                  fontStyle: FontStyle.italic,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w200
-                                ),
+                                    fontSize: 16,
+                                    fontFamily: 'Roboto',
+                                    fontStyle: FontStyle.italic,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w200),
                               ),
                             ),
                             onTap: () {
