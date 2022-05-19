@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:readerdatabase/add-book.dart';
 import 'package:readerdatabase/db/operations.dart';
 import 'package:readerdatabase/models/book.dart';
 import 'package:readerdatabase/screens/book/book_home.dart';
+import 'package:local_auth/local_auth.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
@@ -22,6 +24,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   String name = "Carlos"; //Change
   List<Book> booksDB = [];
+  bool signIn = false;
   //Function executed when the screen is initializing
   @override
   void initState() {
@@ -117,16 +120,13 @@ class _HomePageState extends State<HomePage> {
             ),
             onTap: () async {
               (booksDB.isNotEmpty)
-                  ? {
-                      Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const BookHome(),
-                                  settings: RouteSettings(
-                                      arguments:
-                                          booksDB[booksDB.length - 1].id)))
-                          .then((value) => _retrieveBookData()),
-                    }
+                  ? Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const BookHome(),
+                              settings: RouteSettings(
+                                  arguments: booksDB[booksDB.length - 1].id)))
+                      .then((value) => _retrieveBookData())
                   : Null;
             },
           ),
@@ -157,9 +157,21 @@ class _HomePageState extends State<HomePage> {
                     child: const Icon(Icons.delete_forever),
                   ),
                   key: ValueKey<int>(booksDB[index].id!),
-                  onDismissed: (DismissDirection direction) async {
-                    await Operation.deleteBook(booksDB[index].id!);
-                    _retrieveBookData();
+                  confirmDismiss: (DismissDirection direction) async {
+                    if (direction == DismissDirection.endToStart) {
+                      try {
+                        bool didAuth = await LocalAuthentication().authenticate(
+                            localizedReason:
+                                'Please authenticate to delete the record');
+                        if (didAuth == true) {
+                          await Operation.deleteBook(booksDB[index].id!);
+                          _retrieveBookData();
+                        }
+                      } on PlatformException catch (_) {
+                        await Operation.deleteBook(booksDB[index].id!);
+                        _retrieveBookData();
+                      }
+                    }
                   },
                   child: Card(
                       shadowColor: const Color.fromARGB(255, 139, 139, 139),
@@ -213,5 +225,6 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       booksDB = _booksData;
     });
+    if (!mounted) return;
   }
 }
