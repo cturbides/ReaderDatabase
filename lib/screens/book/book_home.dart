@@ -5,6 +5,7 @@ import 'package:readerdatabase/models/comments.dart';
 import 'package:readerdatabase/models/quotes.dart';
 import 'package:readerdatabase/models/unknow_words.dart';
 import 'package:readerdatabase/screens/book/book_comments.dart';
+import 'package:readerdatabase/screens/book/book_export.dart';
 import 'package:readerdatabase/screens/book/book_quotes.dart';
 import 'package:readerdatabase/screens/book/book_unknowWords.dart';
 import '../../models/book.dart';
@@ -27,7 +28,7 @@ class _BookHomeState extends State<BookHome> {
     super.initState();
 
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
-      _retrieveBook();
+      await _retrieveBook();
     });
   }
 
@@ -49,7 +50,14 @@ class _BookHomeState extends State<BookHome> {
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.black,
-        onPressed: () async {}, //Complete
+        onPressed: () async {
+          Navigator.of(context)
+              .push(HeroPageRoute(
+                  //Defined in book_export.dart file
+                  builder: (context) => const ExportGK(),
+                  settings: RouteSettings(arguments: bookId)))
+              .then((value) => _retrieveBook());
+        }, //Complete
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -101,9 +109,7 @@ class _BookHomeState extends State<BookHome> {
                       MaterialPageRoute(
                           builder: (context) => const AddBook(),
                           settings: RouteSettings(arguments: _book.id)))
-                  .then((value) => setState(() {
-                        _retrieveBook();
-                      }));
+                  .then((value) => _retrieveBook());
             },
             splashColor: Colors.transparent,
           ),
@@ -135,7 +141,8 @@ class _BookHomeState extends State<BookHome> {
                     SizedBox(
                       width: double.infinity,
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 30, top: 5, right: 30),
+                        padding:
+                            const EdgeInsets.only(left: 30, top: 5, right: 30),
                         child: Text(
                           "\"${lastQuote.content}\"",
                           style: const TextStyle(
@@ -149,15 +156,13 @@ class _BookHomeState extends State<BookHome> {
                     )
                   ],
                 ),
-                onLongPress: () {
+                onTap: () {
                   Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => const BookQuotes(),
                               settings: RouteSettings(arguments: _book.id!)))
-                      .then((value) => setState(() {
-                            _retrieveLastQuote(_book.id!);
-                          }));
+                      .then((value) => _retrieveLastQuote(_book.id!));
                 },
                 splashColor: Colors.transparent,
               ),
@@ -185,7 +190,8 @@ class _BookHomeState extends State<BookHome> {
                     SizedBox(
                       width: double.infinity,
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 30, top: 5, right: 30),
+                        padding:
+                            const EdgeInsets.only(left: 30, top: 5, right: 30),
                         child: Text(
                           (lastComment.content.length > 140)
                               ? "\"${lastComment.content.characters.take(140)}...\""
@@ -201,15 +207,13 @@ class _BookHomeState extends State<BookHome> {
                     )
                   ],
                 ),
-                onLongPress: () {
+                onTap: () {
                   Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => const BookComments(),
                               settings: RouteSettings(arguments: _book.id!)))
-                      .then((value) => setState(() {
-                            _retrieveLastComment(_book.id!);
-                          }));
+                      .then((value) => _retrieveLastComment(_book.id!));
                 },
                 splashColor: Colors.transparent,
               ),
@@ -237,7 +241,8 @@ class _BookHomeState extends State<BookHome> {
                     SizedBox(
                       width: double.infinity,
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 30, top: 5, right: 30 ),
+                        padding:
+                            const EdgeInsets.only(left: 30, top: 5, right: 30),
                         child: Text(
                           (lastUnknowWords.content.length > 50)
                               ? "${lastUnknowWords.name}: ${lastUnknowWords.content.characters.take(50)}.."
@@ -253,15 +258,13 @@ class _BookHomeState extends State<BookHome> {
                     )
                   ],
                 ),
-                onLongPress: () {
+                onTap: () {
                   Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => const BookUnknowWords(),
                               settings: RouteSettings(arguments: _book.id!)))
-                      .then((value) => setState(() {
-                            _retrieveLastUnknowWord(_book.id!);
-                          }));
+                      .then((value) => _retrieveLastUnknowWord(_book.id!));
                 },
                 splashColor: Colors.transparent,
               ),

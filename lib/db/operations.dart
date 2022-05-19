@@ -111,7 +111,8 @@ class Operation {
   static Future<List<Comments>> comments(int bookId) async {
     final Database db = await _openDB(); //Creating an instance from our db
     //Getting the whole Comments table
-    final List<Map<String, Object?>> commentList = await db.query('Comments', where: "bookId = ?", whereArgs: [bookId]);
+    final List<Map<String, Object?>> commentList =
+        await db.query('Comments', where: "bookId = ?", whereArgs: [bookId]);
 
     for (var i in commentList) {
       print("-> ${i['content']}");
@@ -139,7 +140,8 @@ class Operation {
   static Future<List<Quotes>> quotes(int bookId) async {
     final Database db = await _openDB(); //Creating an instance from our db
     //Getting the whole Quotes table
-    final List<Map<String, Object?>> quotesList = await db.query('Quotes', where: "bookId = ?", whereArgs: [bookId]);
+    final List<Map<String, Object?>> quotesList =
+        await db.query('Quotes', where: "bookId = ?", whereArgs: [bookId]);
 
     for (var i in quotesList) {
       print("-> ${i['content']}");
@@ -269,4 +271,35 @@ class Operation {
     return;
   }
   //=======================================================================
+
+  //===============================Exports====================================
+  static Future<String> allBookData(int bookId) async {
+    List<Quotes> quotes = await Operation.quotes(bookId);
+    List<Comments> comments = await Operation.comments(bookId);
+    List<UnknowWords> unknowWords = await Operation.unknowWords(bookId);
+    Book book = await Operation.book(bookId);
+    String message = book.briefIntroduction + "\n";
+    if (unknowWords.isNotEmpty) {
+      message += "\nUnknow Words\n";
+      for (var i = 0; i < unknowWords.length; i++) {
+        message += "●${unknowWords[i].name}: ${unknowWords[i].content}\n";
+      }
+    }
+    if (quotes.isNotEmpty) {
+      message += "\nQuotes\n";
+      for (var i = 0; i < quotes.length; i++) {
+        message += "■${quotes[i].content}\n";
+      }
+    }
+    if (comments.isNotEmpty) {
+      message += "\nComments\n";
+      for (var i = 0; i < comments.length; i++) {
+        message += "■${comments[i].content}\n";
+      }
+    }
+    message +=
+        "\nCalificacion final: ${book.calification}/5\nComentario final: ${book.finalOpinion}";
+    return message;
+  }
+  //==========================================================================
 }
