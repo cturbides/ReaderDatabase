@@ -14,7 +14,7 @@ makes possible understand the difference between a note, unknow word and quote).
 - And so son
 
 ## _Captures_
-![Home view](./assets/photos/Book_Menu.png)
+![Home view](./assets/photos/Main.png)
 ![Book menu](./assets/photos/Book_Menu.png)
 ![Book export](./assets/photos/Book_Export.png)
 
