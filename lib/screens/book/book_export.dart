@@ -14,6 +14,7 @@ class _ExportGKState extends State<ExportGK> {
   Book _book =
       Book(title: "", author: "", briefIntroduction: "briefIntroduction");
   final _finalController = TextEditingController();
+  String author = "", title = "";
   int _rating = 0;
   String message = "Export";
 
@@ -46,7 +47,7 @@ class _ExportGKState extends State<ExportGK> {
                     Column(children: <Widget>[
                       Center(
                           child: Text(
-                        _book.title,
+                        title,
                         style: const TextStyle(
                             color: Colors.white,
                             fontFamily: 'Roboto',
@@ -57,7 +58,7 @@ class _ExportGKState extends State<ExportGK> {
                           child: Text(
                         (_book.author.characters.isEmpty)
                             ? ""
-                            : "by ${_book.author}",
+                            : "by $author",
                         style: const TextStyle(
                             color: Colors.white,
                             fontFamily: 'Roboto',
@@ -165,6 +166,8 @@ class _ExportGKState extends State<ExportGK> {
       Book book = await Operation.book(bookId);
       setState(() {
         _book = book;
+        author = _book.author;
+        title = _book.title;
         (_book.finalOpinion != null)
             ? _finalController.text = _book.finalOpinion!
             : null;

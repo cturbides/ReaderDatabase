@@ -128,7 +128,7 @@ class BookCommentsState extends State<BookComments> {
                 itemCount: comments.length,
                 shrinkWrap: true,
                 physics: const ClampingScrollPhysics(),
-                padding: const EdgeInsets.only(left: 32, right: 32),
+                padding: const EdgeInsets.only(left: 32, right: 32, bottom: 70),
                 scrollDirection: Axis.vertical,
               ))
             ]));
