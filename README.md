@@ -2,7 +2,7 @@
 ## _Tool for all reader's notes_
 
 This app helps you to take, update, delete and read all your book's notes and
-insights. Also, it helps you to have a unknow words list with their respective
+insights. Also, it helps you to have a unknown words list with their respective
 definition. ReaderDatabase is clean, lightweight and easier to use.
 Each book has a option to export in Google keep's format (something created by me that 
 makes possible understand the difference between a note, unknow word and quote).
